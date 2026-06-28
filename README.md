@@ -352,6 +352,296 @@ Benefits:
 * Startup on reboot
 
 ---
+# Installing and Configuring Nginx on Ubuntu
+
+This guide explains how to install, configure, and serve a simple static website using **Nginx** on an Ubuntu server.
+
+---
+
+# Prerequisites
+
+Before installing Nginx, ensure you have:
+
+- A server with root or sudo access
+- A domain name or server IP address
+- Ubuntu installed on the server
+
+---
+
+# Step 1: Update Package Index
+
+Update your package list before installing new software.
+
+```bash
+sudo apt update
+```
+
+---
+
+# Step 2: Install Nginx
+
+Install the Nginx package.
+
+```bash
+sudo apt install nginx
+```
+
+---
+
+# Step 3: Start and Enable Nginx
+
+Start the Nginx service and enable it to start automatically after every reboot.
+
+```bash
+sudo systemctl start nginx
+sudo systemctl enable nginx
+```
+
+Verify that Nginx is running by visiting:
+
+```
+http://YOUR_SERVER_IP
+```
+
+You should see the default **Welcome to Nginx** page.
+
+---
+
+# Step 4: Configure Nginx
+
+Open the default server configuration file.
+
+```bash
+sudo vim /etc/nginx/sites-available/default
+```
+
+Replace its contents with:
+
+```nginx
+server {
+    listen 80;
+    server_name localhost;
+
+    root /var/www/html;
+    index index.html index.htm;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+```
+
+### Configuration Explanation
+
+| Directive | Description |
+|-----------|-------------|
+| `listen 80` | Listens for HTTP requests on port 80 |
+| `server_name localhost` | Defines the server name |
+| `root /var/www/html` | Sets the website root directory |
+| `index` | Specifies the default page |
+| `try_files` | Returns the requested file or a 404 error if not found |
+
+---
+
+# Step 5: Create the Document Root
+
+Create the web root directory if it doesn't already exist.
+
+```bash
+sudo mkdir -p /var/www/html
+```
+
+---
+
+# Step 6: Set Directory Ownership
+
+Give ownership of the directory to the current user.
+
+```bash
+sudo chown -R $USER:$USER /var/www/html
+```
+
+---
+
+# Step 7: Set Permissions
+
+Grant appropriate permissions.
+
+```bash
+sudo chmod -R 755 /var/www/html
+```
+
+---
+
+# Step 8: Navigate to the Web Root
+
+```bash
+cd /var/www/html
+```
+
+---
+
+# Step 9: Create an HTML File
+
+Create an empty `index.html`.
+
+```bash
+touch index.html
+```
+
+Open it for editing.
+
+```bash
+sudo vim index.html
+```
+
+Add the following HTML:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to Nginx</title>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+</body>
+</html>
+```
+
+Save and close the file.
+
+---
+
+# Step 10: Test Nginx Configuration
+
+Before applying changes, test the configuration.
+
+```bash
+sudo nginx -t
+```
+
+Expected output:
+
+```
+nginx: the configuration file syntax is ok
+nginx: configuration file test is successful
+```
+
+---
+
+# Step 11: Reload Nginx
+
+Apply the configuration changes.
+
+```bash
+sudo systemctl reload nginx
+```
+
+---
+
+# Step 12: Verify the Website
+
+Open your browser and visit:
+
+```
+http://YOUR_SERVER_IP
+```
+
+or
+
+```
+http://YOUR_DOMAIN_NAME
+```
+
+You should now see:
+
+```
+Hello, World!
+```
+
+---
+
+# Useful Nginx Commands
+
+Start Nginx
+
+```bash
+sudo systemctl start nginx
+```
+
+Stop Nginx
+
+```bash
+sudo systemctl stop nginx
+```
+
+Restart Nginx
+
+```bash
+sudo systemctl restart nginx
+```
+
+Reload Configuration
+
+```bash
+sudo systemctl reload nginx
+```
+
+Check Status
+
+```bash
+sudo systemctl status nginx
+```
+
+Test Configuration
+
+```bash
+sudo nginx -t
+```
+
+Enable on Boot
+
+```bash
+sudo systemctl enable nginx
+```
+
+Disable on Boot
+
+```bash
+sudo systemctl disable nginx
+```
+
+---
+
+# Directory Structure
+
+```
+/etc/nginx/
+├── nginx.conf
+├── sites-available/
+│   └── default
+└── sites-enabled/
+    └── default
+
+/var/www/html/
+└── index.html
+```
+
+---
+
+# Summary
+
+In this guide, you learned how to:
+
+- Install Nginx
+- Start and enable the Nginx service
+- Configure a server block
+- Create a simple static website
+- Test the configuration
+- Reload Nginx
+- Access the website from a browser
+---
 
 # 🧠 Key Takeaways
 
